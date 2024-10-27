@@ -13,7 +13,7 @@ program
 
 const options = program.opts();
 
-// Перевірка наявності вхідного файлу
+// Check if input file is specified
 if (!options.input) {
     console.error("Please, specify input file");
     process.exit(1);
@@ -21,14 +21,15 @@ if (!options.input) {
 
 const inputPath = path.resolve(options.input);
 
-// Перевіряємо, чи існує вхідний файл
+// Check if input file exists
 if (!fs.existsSync(inputPath)) {
     console.error("Cannot find input file");
     process.exit(1);
 }
 
-// Читаємо дані з JSON файлу
+// Read input JSON file
 fs.readFile(inputPath, 'utf8', (err, data) => {
+    // Error catch
     if (err) {
       console.error("Error reading input file:", err);
       process.exit(1);
@@ -36,9 +37,10 @@ fs.readFile(inputPath, 'utf8', (err, data) => {
   
     const jsonData = JSON.parse(data);
   
-    // Логіка для виведення результату залежно від параметрів
+    // Check if output file is specified
     if (options.output) {
       const outputPath = path.resolve(options.output);
+      // Write output JSON file
       fs.writeFile(outputPath, JSON.stringify(jsonData, null, 2), (err) => {
         if (err) {
           console.error("Error writing to output file:", err);
@@ -47,7 +49,7 @@ fs.readFile(inputPath, 'utf8', (err, data) => {
         }
       });
     }
-  
+    // Output to terminal
     if (options.display) {
       console.log("Result:", jsonData);
     }
