@@ -1,0 +1,11 @@
+{
+  "name": "nbuson",
+  "version": "1.0.0",
+  "description": "Working with JSON data of National Bank of Ukraine",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dmytro Mernov",
+  "license": "ISC"
+}
