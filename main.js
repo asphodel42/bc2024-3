@@ -28,29 +28,33 @@ if (!fs.existsSync(inputPath)) {
 }
 
 // Read input JSON file
-fs.readFile(inputPath, 'utf8', (err, data) => {
-    // Error catch
-    if (err) {
-      console.error("Error reading input file:", err);
-      process.exit(1);
+let jsonData;
+try {
+    const data = fs.readFileSync(inputPath, 'utf8');
+    jsonData = JSON.parse(data);
+} catch (err) {
+    console.error("Error reading input file:", err);
+    process.exit(1);
+}
+
+// Find max rate
+const maxRate = Math.max(...jsonData.map(rate => rate.rate));
+
+// From the result, find the currency with the maximum rate
+const resultText = `Максимальний курс: ${maxRate.toFixed(4)}\n`;
+
+// Write result to output file
+if (options.output) {
+    const outputPath = path.resolve(options.output);
+    try {
+        fs.writeFileSync(outputPath, resultText);
+        console.log(`Result has been saved to ${outputPath}`);
+    } catch (err) {
+        console.error("Error writing to output file:", err);
     }
-  
-    const jsonData = JSON.parse(data);
-  
-    // Check if output file is specified
-    if (options.output) {
-      const outputPath = path.resolve(options.output);
-      // Write output JSON file
-      fs.writeFile(outputPath, JSON.stringify(jsonData, null, 2), (err) => {
-        if (err) {
-          console.error("Error writing to output file:", err);
-        } else {
-          console.log(`Result has been saved to ${outputPath}`);
-        }
-      });
-    }
-    // Output to terminal
-    if (options.display) {
-      console.log("Result:", jsonData);
-    }
-});
+}
+
+// Output result to terminal
+if (options.display) {
+    console.log(resultText);
+}
